@@ -201,13 +201,13 @@
 <p>先手工注入?id=1 and 1=1 跟?id=1 and 1=2发现页面没有报错</p>
 <p><img src="https://img-blog.csdnimg.cn/2020011100353766.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTcyODk3Ng==,size_16,color_FFFFFF,t_70"></p>
 <p>但是当我们输入 ?id=1’ 时发现了页面报错由此可以判断本题时字符型注入</p>
-<p><img src="http://m.qpic.cn/psc?/V11ROCcw35yBdG/TmEUgtj9EK6.7V8ajmQrENnM2.vlxuqJen12fwyjqU8Rmt8jr.4tRaJjC3c0Ot.wIZ8yks0XYmfINisstB9aFdH57RkvJrmJ.LuRYGU86qo!/b&bo=gAd4AwAAAAADJ*4!&rf=viewer_4"></p>
+<p><img src="https://i.ibb.co/LQtWN41/2021-08-03-T14-25-15-897-Z.png"></p>
 <p>确定了注入类型后就是判断表中的列数，我们使用order by来确定表中的列数</p>
 <p>我们构造?id=1’ and ‘1’=’1’ order by 1–+　　页面回显正常</p>
 <p>　　　　?id=1’ and ‘1’=’1’ order by 2–+　　页面回显正常</p>
 <p>　　　　?id=1’ and ‘1’=’1’ order by 3–+　　页面回显正常</p>
 <p>　　　　?id=1’ and ‘1’=’1’ order by 4–+　　出现报错界面</p>
-<p><img src="http://m.qpic.cn/psc?/V11ROCcw35yBdG/TmEUgtj9EK6.7V8ajmQrEFhSWRWPaH0dBxHdIKUpSAppxsN94FIJRFfWMJaNylcVVyumbQ3vD21lZFPwVQJ5gKkdgPcUrTfRifypyCYYQ.I!/b&bo=GwZWAgAAAAADF3s!&rf=viewer_4"></p>
+<p><img src="https://i.ibb.co/swnWjc0/2.png"></p>
 <p>然后我们就确定了字段数，于是用联合查询?id=-1’ union select 1,2,3–+看看union查询是否有回显位（将id=1改为一个数据库不存在的id值）<br><img src="http://m.qpic.cn/psc?/V11ROCcw35yBdG/TmEUgtj9EK6.7V8ajmQrELKIi7LNt.zpGYvA9zy5dEThj7odT8ohzky65ghgAIC0ozpRrBYx1MX*pxpVW3SERJopl*e3Qgz6LvzJ2NGSAZQ!/b&bo=nQVHAgAAAAADJ98!&rf=viewer_4"></p>
 <p>这样我们就看到了2，3这两个回显位</p>
 <p>接下来利用这两个回显位来查询数据库，和数据库版本信息，利用union查询爆出表名</p>
