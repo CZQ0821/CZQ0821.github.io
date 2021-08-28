@@ -13,6 +13,13 @@
     
 
     
+        <meta name="description" content="Less 19
+ 本关需要我们自己添加Referer头，添加完后我们可以开始注入。接下来的过程与Less 18一致。
+Less 20
+ 首先登录用户查看，用
+ ‘ or updatexml(1,concat(‘#’,(select database()),’#’),1)#
+ 修改不同的地方查找注入点"/>
+    
 
     <!--Author-->
     
@@ -21,10 +28,17 @@
 
     <!--Open Graph Title-->
     
-        <meta property="og:title" content="Hexo"/>
+        <meta property="og:title" content="sqli-labs 11"/>
     
 
     <!--Open Graph Description-->
+    
+        <meta property="og:description" content="Less 19
+ 本关需要我们自己添加Referer头，添加完后我们可以开始注入。接下来的过程与Less 18一致。
+Less 20
+ 首先登录用户查看，用
+ ‘ or updatexml(1,concat(‘#’,(select database()),’#’),1)#
+ 修改不同的地方查找注入点"/>
     
 
     <!--Open Graph Site Name-->
@@ -32,7 +46,7 @@
 
     <!--Type page-->
     
-        <meta property="og:type" content="website"/>
+        <meta property="og:type" content="article"/>
     
 
     <!--Page Cover-->
@@ -51,7 +65,7 @@
 
     <!-- Title -->
     
-    <title>page - Hexo</title>
+    <title>sqli-labs 11 - Hexo</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
@@ -156,128 +170,70 @@
 
     <!-- Main Content -->
     <!-- Page Header -->
-<!-- Set your background image for this header in the theme's configuration: index_cover -->
+<!-- Set your background image for this header in your post front-matter: cover -->
+
 <header class="intro-header" style="background-image: url('/img/home-bg.jpg')">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <div class="site-heading">
-                    <h1>Hexo</h1>
-                    <hr class="small">
-                    <span class="subheading"></span>
+                <div class="post-heading">
+                    <h1>sqli-labs 11</h1>
+                    
+                    <span class="meta">
+                        <!-- Date and Author -->
+                        
+                        
+                            2021-08-23
+                        
+                    </span>
                 </div>
             </div>
         </div>
     </div>
 </header>
 
-<!-- Main Content -->
-<div class="container">
-    <div class="row">
-        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-            
-                <div class="post-preview">
-    <a href="/2021/07/31/初学sql/">
-        <h2 class="post-title">
-            初学sql
-        </h2>
-        
-    </a>
-    <p class="post-meta">
-        <!-- Date and Author -->
-        
-        2021-07-31
-    </p>
-</div>
-<hr>
-            
-                <div class="post-preview">
-    <a href="/2021/07/23/网安夏令营day5/">
-        <h2 class="post-title">
-            网安夏令营day5
-        </h2>
-        
-    </a>
-    <p class="post-meta">
-        <!-- Date and Author -->
-        
-        2021-07-23
-    </p>
-</div>
-<hr>
-            
-                <div class="post-preview">
-    <a href="/2021/07/22/网安夏令营day4/">
-        <h2 class="post-title">
-            网安夏令营day4
-        </h2>
-        
-    </a>
-    <p class="post-meta">
-        <!-- Date and Author -->
-        
-        2021-07-22
-    </p>
-</div>
-<hr>
-            
-                <div class="post-preview">
-    <a href="/2021/07/21/网安夏令营day3/">
-        <h2 class="post-title">
-            网安夏令营day3
-        </h2>
-        
-    </a>
-    <p class="post-meta">
-        <!-- Date and Author -->
-        
-        2021-07-21
-    </p>
-</div>
-<hr>
-            
-                <div class="post-preview">
-    <a href="/2021/07/20/网安夏令营day2/">
-        <h2 class="post-title">
-            网安夏令营day2
-        </h2>
-        
-    </a>
-    <p class="post-meta">
-        <!-- Date and Author -->
-        
-        2021-07-20
-    </p>
-</div>
-<hr>
-            
-                <div class="post-preview">
-    <a href="/2021/07/19/网安夏令营day1/">
-        <h2 class="post-title">
-            网安夏令营day1
-        </h2>
-        
-    </a>
-    <p class="post-meta">
-        <!-- Date and Author -->
-        
-        2021-07-19
-    </p>
-</div>
-<hr>
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Tags and categories -->
+           
+
+            <!-- Gallery -->
             
 
-            <ul class="pager">
-    
-        <li class="previous"><a href="/">&larr;  Newer Posts</a></li>
-    
-    
-</ul>
+            <!-- Post Main Content -->
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <p>Less 19</p>
+<p> 本关需要我们自己添加Referer头，添加完后我们可以开始注入。接下来的过程与Less 18一致。</p>
+<p>Less 20</p>
+<p> 首先登录用户查看，用</p>
+<p> ‘ or updatexml(1,concat(‘#’,(select database()),’#’),1)#</p>
+<p> 修改不同的地方查找注入点发现只有插入到cookie里面可以注入，于是我们将查询语句插入到cooker中就行了，接下来的注入过程与less 18的步骤一致。</p>
+<p>Less 21</p>
+<p> 本关对 cookie 进行了 base64 的处理，其他的处理流程和 less20 是一样的。我们这里可以利用 less20 同样的方法，但是需要将 payload 进行 base64 编码处理。</p>
+<p>Less 22</p>
+<p> 本关与前面less 21 的差别就是对 uname 进行了”uname”的处理，可以构造 payload：</p>
+<pre><code>admin1&quot;and extractvalue(1,concat(0x7e,(select database()),0x7e))#
+</code></pre>
+<p> Payload 进行 base64 编码后，修改 cookie 再进行提交。</p>
+
+
+                
+            </div>
+
+            <!-- Comments -->
+            
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    
+
+
+                </div>
+            
         </div>
     </div>
-</div>
-
-
+</article>
 
     <!-- Footer -->
     <hr />

